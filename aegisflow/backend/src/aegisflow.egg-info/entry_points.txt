@@ -1,0 +1,2 @@
+[console_scripts]
+aegisflow = aegisflow.main:main

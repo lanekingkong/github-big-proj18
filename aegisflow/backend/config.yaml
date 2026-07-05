@@ -1,0 +1,90 @@
+# AegisFlow default policy configuration
+
+name: "aegisflow_default"
+default_action: "deny"
+
+rules:
+  # Allow safe read-only API calls
+  - name: "allow_safe_api"
+    description: "Allow safe GET/HEAD/OPTIONS API calls"
+    resource: "api_call"
+    action: "allow"
+    conditions:
+      method: "^(GET|HEAD|OPTIONS)$"
+    risk_level: "low"
+    priority: 10
+    enabled: true
+
+  # Human approval for write operations
+  - name: "human_loop_write"
+    description: "Require human approval for write operations"
+    resource: "api_call"
+    action: "human_loop"
+    conditions:
+      method: "^(POST|PUT|PATCH|DELETE)$"
+    risk_level: "medium"
+    priority: 20
+    enabled: true
+
+  # Deny access to system files
+  - name: "deny_system_files"
+    description: "Deny access to system files and directories"
+    resource: "file_access"
+    action: "deny"
+    conditions:
+      path: "^(/etc/|/sys/|/proc/|C:\\\\Windows\\\\)"
+    risk_level: "critical"
+    priority: 100
+    enabled: true
+
+  # Allow user file access
+  - name: "allow_user_files"
+    description: "Allow access to user files"
+    resource: "file_access"
+    action: "allow"
+    conditions: {}
+    risk_level: "low"
+    priority: 5
+    enabled: true
+
+  # Deny external network by default
+  - name: "deny_external_network"
+    description: "Deny access to external networks"
+    resource: "network"
+    action: "deny"
+    conditions:
+      target: "^(?!localhost|127\\.0\\.0\\.1|10\\.|172\\.|192\\.168\\.).*"
+    risk_level: "medium"
+    priority: 50
+    enabled: true
+
+  # Allow LLM calls with tracking
+  - name: "budget_llm_calls"
+    description: "Allow LLM calls with budget tracking"
+    resource: "llm_call"
+    action: "allow"
+    conditions: {}
+    risk_level: "low"
+    priority: 5
+    enabled: true
+
+  # Human approval for database write
+  - name: "human_loop_db_write"
+    description: "Human approval for database write operations"
+    resource: "database"
+    action: "human_loop"
+    conditions:
+      operation: "^(INSERT|UPDATE|DELETE|DROP|ALTER)$"
+    risk_level: "high"
+    priority: 80
+    enabled: true
+
+  # Deny process execution
+  - name: "deny_process_spawn"
+    description: "Deny spawning external processes"
+    resource: "process"
+    action: "deny"
+    conditions: {}
+    risk_level: "critical"
+    priority: 90
+    enabled: true

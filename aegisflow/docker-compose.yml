@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  aegisflow-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/config.yaml:/app/config.yaml
+      - aegisflow_data:/app/data
+    environment:
+      - AEGISFLOW_LOG_LEVEL=INFO
+      - AEGISFLOW_CONFIG=/app/config.yaml
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  aegisflow-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://aegisflow-backend:8000
+    depends_on:
+      - aegisflow-backend
+    restart: unless-stopped
+
+volumes:
+  aegisflow_data:

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="description" content="AegisFlow - AI Agent Governance Dashboard"/>
+  <title>AegisFlow Dashboard</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0}
+    #root{min-height:100vh;display:flex;flex-direction:column}
+    .loading-screen{display:flex;align-items:center;justify-content:center;height:100vh;font-size:1.5rem;color:#64748b}
+    .loading-screen::after{content:'|';animation:blink 1s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  </style>
+</head>
+<body>
+  <div id="root"><div class="loading-screen">AegisFlow Initializing</div></div>
+</body>
+</html>
